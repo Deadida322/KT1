@@ -1,7 +1,7 @@
 import java.util.*
 
 class Task2 {
-    var a: AuthCallback = object: AuthCallback{
+    var a: AuthCallback = object : AuthCallback {
         override fun authSuccess() {
             println("Авторизация выполнена успешно")
         }
@@ -12,17 +12,18 @@ class Task2 {
     }
 
     public fun doAction(action: Action) {
-        when (action){
+        when (action) {
             is Action.Registration -> println("Регистрация началась")
             is Action.Logout -> println("Вы вышли из аккаунта")
             is Action.Login -> auth(action.user, a) { println("Кэш обновлён") }
         }
     }
+
     enum class Type {
         DEMO, FULL
     }
 
-    private class IllegalAgeException(message:String): Exception(message)
+    private class IllegalAgeException(message: String) : Exception(message)
 
     class User(var id: Int, var name: String, var age: Byte, var type: Type) {
         val startTime: Long by lazy {
@@ -30,35 +31,36 @@ class Task2 {
             format.parse(format.format(Date())).time
         }
 
-        override fun toString(): String{
+        override fun toString(): String {
             return "$id $name $age $type"
         }
     }
 
-    inline fun auth(user: User, callback: AuthCallback, updateCache: ()-> Unit){
+    inline fun auth(user: User, callback: AuthCallback, updateCache: () -> Unit) {
         if (user.age > 18) {
             callback.authSuccess()
             updateCache()
-        }
-        else {
+        } else {
             callback.authFailed()
         }
     }
 
 
     companion object {
-        fun getUserNameList(list: List<User>): List<String>{
+        fun getUserNameList(list: List<User>): List<String> {
             val userList = mutableListOf<String>()
-            for (i in list){
+            for (i in list) {
                 userList.add(i.name)
             }
             return userList
         }
+
         private fun <T> printList(list: List<T>) {
-            for (i in list){
+            for (i in list) {
                 println(i)
             }
         }
+
         private fun getFullAccessList(userList: List<User>): List<User> {
 
             val resultList = mutableListOf<User>()
@@ -95,7 +97,7 @@ class Task2 {
             printList(getUserNameList(userList))
 
 
-            fun User.isAdult() {
+            fun User.isAdult() { //Почему не видит в инлайн функции
                 if (this.age > 18) return println(this)
                 else throw IllegalAgeException("Недопустимый возраст")
             }
