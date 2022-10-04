@@ -1,6 +1,7 @@
 import java.util.*
 
 class Task2 {
+
     var a: AuthCallback = object : AuthCallback {
         override fun authSuccess() {
             println("Авторизация выполнена успешно")
@@ -36,18 +37,25 @@ class Task2 {
         }
     }
 
-    inline fun auth(user: User, callback: AuthCallback, updateCache: () -> Unit) {
-        if (user.age > 18) {
-            callback.authSuccess()
-            updateCache()
-        } else {
-            callback.authFailed()
-        }
-    }
+
 
 
     companion object {
-        fun getUserNameList(list: List<User>): List<String> {
+        fun User.isAdult() {
+            if (this.age > 18) return println(this)
+            else throw IllegalAgeException("Недопустимый возраст")
+        }
+        inline fun auth(user: User, callback: AuthCallback, updateCache: () -> Unit) {
+            try {
+                user.isAdult()
+                callback.authSuccess()
+                updateCache()
+            }
+            catch (e: IllegalAgeException){
+                callback.authFailed()
+            }
+        }
+        private fun getUserNameList(list: List<User>): List<String> {
             val userList = mutableListOf<String>()
             for (i in list) {
                 userList.add(i.name)
@@ -95,12 +103,6 @@ class Task2 {
 
             println("Имена пользователей")
             printList(getUserNameList(userList))
-
-
-            fun User.isAdult() { //Почему не видит в инлайн функции
-                if (this.age > 18) return println(this)
-                else throw IllegalAgeException("Недопустимый возраст")
-            }
         }
     }
 
