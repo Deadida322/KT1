@@ -29,16 +29,17 @@ class Task2 {
             else
                 throw IllegalAgeException("Недопустимый возраст")
         }
+
         inline fun auth(user: User, callback: AuthCallback, updateCache: () -> Unit) {
             try {
                 user.isAdult()
                 callback.authSuccess()
                 updateCache()
-            }
-            catch (e: IllegalAgeException){
+            } catch (e: IllegalAgeException) {
                 callback.authFailed()
             }
         }
+
         private fun getUserNameList(list: List<User>): List<String> {
             val userList = mutableListOf<String>()
             for (i in list) {
