@@ -20,30 +20,14 @@ class Task2 {
         }
     }
 
-    enum class Type {
-        DEMO, FULL
-    }
-
     private class IllegalAgeException(message: String) : Exception(message)
-
-    class User(var id: Int, var name: String, var age: Byte, var type: Type) {
-        val startTime: Long by lazy {
-            val format = java.text.SimpleDateFormat("dd-MM-yyyy hh:mm:ss.SSS")
-            format.parse(format.format(Date())).time
-        }
-
-        override fun toString(): String {
-            return "$id $name $age $type"
-        }
-    }
-
-
-
 
     companion object {
         fun User.isAdult() {
-            if (this.age > 18) return println(this)
-            else throw IllegalAgeException("Недопустимый возраст")
+            if (this.age > 18)
+                return println(this)
+            else
+                throw IllegalAgeException("Недопустимый возраст")
         }
         inline fun auth(user: User, callback: AuthCallback, updateCache: () -> Unit) {
             try {
@@ -82,20 +66,20 @@ class Task2 {
 
         fun main() {
             println("Первый пользователь")
-            val firstUser = User(123, "David", 12, Type.DEMO)
+            val firstUser = User.UserBuilder("Serg", 1).setAge(12).build()
             println(firstUser.startTime)
 
             Thread.sleep(1000)
             println("Второй пользователь")
-            val secondUser = User(123, "David", 12, Type.FULL)
+            val secondUser = User.UserBuilder("David", 2).setAge(15).build()
             println(secondUser.startTime)
 
             val userList = mutableListOf<User>(
-                User(1213, "Stas", 54, Type.FULL)
+                User.UserBuilder("Dona", 8).setAge(19).setType(Type.FULL).build()
             ).apply {
-                add(User(123, "Semen", 0, Type.DEMO))
-                add(User(13, "YarAsSlave", 18, Type.FULL))
-                add(User(313, "Sasha", 23, Type.DEMO))
+                add(User.UserBuilder("Andrew", 32).setAge(18).build())
+                add(User.UserBuilder("Mora", 21).setAge(120).setType(Type.FULL).build())
+                add(User.UserBuilder("Lorem", 22).setAge(15).build())
             }
 
             println("Пользователи с полным доступом")
